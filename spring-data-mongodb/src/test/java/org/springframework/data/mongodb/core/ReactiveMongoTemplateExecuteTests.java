@@ -39,6 +39,8 @@ import com.mongodb.MongoException;
 import com.mongodb.ReadPreference;
 import com.mongodb.reactivestreams.client.MongoDatabase;
 
+import static org.junit.Assume.assumeTrue;
+import static org.springframework.data.mongodb.core.MongoDbUtilsIntegrationTests.template;
 import reactor.core.publisher.Flux;
 import reactor.core.test.TestSubscriber;
 
@@ -51,14 +53,25 @@ import reactor.core.test.TestSubscriber;
 @ContextConfiguration("classpath:reactive-infrastructure.xml")
 public class ReactiveMongoTemplateExecuteTests {
 
+	private static final org.springframework.data.util.Version THREE = org.springframework.data.util.Version
+			.parse("3.0");
+
+	
 	@Autowired ReactiveMongoDbFactory factory;
 	@Autowired ReactiveMongoOperations operations;
 
 	@Rule public ExpectedException thrown = ExpectedException.none();
-
+	
+	org.springframework.data.util.Version mongoVersion;
+	
 	@Before
 	public void setUp() {
 		cleanUp();
+		
+		if (mongoVersion == null) {
+			org.bson.Document result = operations.executeCommand("{ buildInfo: 1 }").next().get();
+			mongoVersion = org.springframework.data.util.Version.parse(result.get("version").toString());
+		}
 	}
 
 	@After
@@ -91,6 +104,8 @@ public class ReactiveMongoTemplateExecuteTests {
 	@Test
 	public void executeCommandJsonCommandShouldReturnMultipleResponses() throws Exception {
 
+		assumeTrue(mongoVersion.isGreaterThan(THREE));
+		
 		operations.executeCommand("{ insert: 'execute_test', documents: [{},{},{}]}").next().get();
 
 		TestSubscriber<Document> subscriber = new TestSubscriber<>();

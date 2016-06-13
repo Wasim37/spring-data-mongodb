@@ -55,9 +55,6 @@ import reactor.core.test.TestSubscriber;
 @ContextConfiguration("classpath:reactive-infrastructure.xml")
 public class ReactiveMongoTemplateIndexTests {
 
-	private static final org.springframework.data.util.Version TWO_DOT_EIGHT = org.springframework.data.util.Version
-			.parse("2.8");
-
 	@Autowired ReactiveMongoDbFactory factory;
 	@Autowired ReactiveMongoTemplate template;
 
@@ -111,12 +108,7 @@ public class ReactiveMongoTemplateIndexTests {
 			if ("age_-1".equals(ix.get("name"))) {
 				indexKey = ix.get("key");
 				unique = (Boolean) ix.get("unique");
-				if (mongoVersion.isLessThan(TWO_DOT_EIGHT)) {
-					dropDupes = (Boolean) ix.get("dropDups");
-					assertThat(dropDupes, is(true));
-				} else {
-					assertThat(ix.get("dropDups"), is(nullValue()));
-				}
+				assertThat(ix.get("dropDups"), is(nullValue()));
 			}
 		}
 		assertThat(((org.bson.Document) indexKey), hasEntry("age", -1));
@@ -138,13 +130,7 @@ public class ReactiveMongoTemplateIndexTests {
 
 		IndexInfo ii = indexInfoList.get(1);
 		assertThat(ii.isUnique(), is(true));
-
-		if (mongoVersion.isLessThan(TWO_DOT_EIGHT)) {
-			assertThat(ii.isDropDuplicates(), is(true));
-		} else {
-			assertThat(ii.isDropDuplicates(), is(false));
-		}
-
+		assertThat(ii.isDropDuplicates(), is(false));
 		assertThat(ii.isSparse(), is(false));
 
 		List<IndexField> indexFields = ii.getIndexFields();

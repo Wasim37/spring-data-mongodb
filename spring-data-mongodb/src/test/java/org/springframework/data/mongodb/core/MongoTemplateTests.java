@@ -113,8 +113,6 @@ public class MongoTemplateTests {
 
 	private static final org.springframework.data.util.Version TWO_DOT_FOUR = org.springframework.data.util.Version
 			.parse("2.4");
-	private static final org.springframework.data.util.Version TWO_DOT_EIGHT = org.springframework.data.util.Version
-			.parse("2.8");
 
 	@Autowired MongoTemplate template;
 	@Autowired MongoDbFactory factory;

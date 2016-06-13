@@ -68,6 +68,7 @@ public interface ReactiveMongoOperations {
 	 * converted into Spring's DAO exception hierarchy.
 	 *
 	 * @param jsonCommand a MongoDB command expressed as a JSON string.
+	 * TODO: Inspect whether this could be also a Mono
 	 */
 	Flux<Document> executeCommand(String jsonCommand);
 
@@ -76,6 +77,7 @@ public interface ReactiveMongoOperations {
 	 * exception hierarchy.
 	 *
 	 * @param command a MongoDB command
+	 * TODO: Inspect whether this could be also a Mono
 	 */
 	Flux<Document> executeCommand(Document command);
 
@@ -86,6 +88,7 @@ public interface ReactiveMongoOperations {
 	 * @param command a MongoDB command, must not be {@literal null}.
 	 * @param readPreference read preferences to use, can be {@literal null}.
 	 * @return
+	 * TODO: Inspect whether this could be also a Mono
 	 */
 	Flux<Document> executeCommand(Document command, ReadPreference readPreference);
 
