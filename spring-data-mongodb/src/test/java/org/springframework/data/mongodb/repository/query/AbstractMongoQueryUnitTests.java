@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ import com.mongodb.WriteResult;
  * @author Christoph Strobl
  * @author Oliver Gierke
  * @author Thomas Darimont
+ * @author Mark Paluch
  */
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractMongoQueryUnitTests {
@@ -311,6 +312,7 @@ public class AbstractMongoQueryUnitTests {
 	private static class MongoQueryFake extends AbstractMongoQuery {
 
 		private boolean isCountQuery;
+		private boolean isExistsQuery;
 		private boolean isDeleteQuery;
 
 		public MongoQueryFake(MongoQueryMethod method, MongoOperations operations) {
@@ -325,6 +327,11 @@ public class AbstractMongoQueryUnitTests {
 		@Override
 		protected boolean isCountQuery() {
 			return isCountQuery;
+		}
+
+		@Override
+		protected boolean isExistsQuery() {
+			return false;
 		}
 
 		@Override
