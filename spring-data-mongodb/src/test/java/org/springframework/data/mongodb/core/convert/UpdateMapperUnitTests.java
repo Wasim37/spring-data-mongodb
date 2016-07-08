@@ -371,6 +371,49 @@ public class UpdateMapperUnitTests {
 	}
 
 	/**
+	 * @see DATAMONGO-832
+	 */
+	@Test
+	public void updatePushEachWithSliceShouldRenderCorrectly() {
+
+		Update update = new Update().push("key").slice(5).each(Arrays.asList("Arya", "Arry", "Weasel"));
+
+		Document mappedObject = mapper.getMappedObject(update.getUpdateObject(), context.getPersistentEntity(Object.class));
+
+		Document push = getAsDocument(mappedObject, "$push");
+		Document key = getAsDocument(push, "key");
+
+		assertThat(key.containsKey("$slice"), is(true));
+		assertThat(key.get("$slice"), is(5));
+		assertThat(key.containsKey("$each"), is(true));
+	}
+
+	/**
+	 * @see DATAMONGO-832
+	 */
+	@Test
+	public void updatePushEachWithSliceShouldRenderWhenUsingMultiplePushCorrectly() {
+
+		Update update = new Update().push("key").slice(5).each(Arrays.asList("Arya", "Arry", "Weasel")).push("key-2")
+				.slice(-2).each("The Beggar King", "Viserys III Targaryen");
+
+		Document mappedObject = mapper.getMappedObject(update.getUpdateObject(), context.getPersistentEntity(Object.class));
+
+		Document push = getAsDocument(mappedObject, "$push");
+		Document key = getAsDocument(push, "key");
+
+		assertThat(key.containsKey("$slice"), is(true));
+		assertThat(key.get("$slice"), is(5));
+		assertThat(key.containsKey("$each"), is(true));
+
+		Document key2 = getAsDocument(push, "key-2");
+
+		assertThat(key2.containsKey("$slice"), is(true));
+		assertThat(key2.get("$slice"), is(-2));
+		assertThat(key2.containsKey("$each"), is(true));
+	}
+
+	/**
 	 * @see DATAMONGO-410
 	 */
 	@Test
