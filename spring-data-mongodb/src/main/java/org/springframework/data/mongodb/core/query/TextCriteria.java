@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ public class TextCriteria implements CriteriaDefinition {
 
 	private final List<Term> terms;
 	private String language;
+	private Boolean caseSensitive;
+	private Boolean diacriticSensitive;
 
 	/**
 	 * Creates a new {@link TextCriteria}.
@@ -164,6 +166,32 @@ public class TextCriteria implements CriteriaDefinition {
 		return this;
 	}
 
+	/**
+	 * Optionally enable or disable case sensitive search.
+	 *
+	 * @param caseSensitive boolean flag endable/disable.
+	 * @return never {@literal null}.
+	 * @since 1.10
+	 */
+	public TextCriteria caseSensitive(boolean caseSensitive) {
+
+		this.caseSensitive = caseSensitive;
+		return this;
+	}
+
+	/**
+	 * Optionallly enable or disable diacritic sensitive search against version 3 text indexes.
+	 *
+	 * @param diacriticSensitive boolean flag endable/disable.
+	 * @return never {@literal null}.
+	 * @since 1.10
+	 */
+	public TextCriteria diacriticSensitive(boolean diacriticSensitive) {
+
+		this.diacriticSensitive = diacriticSensitive;
+		return this;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.data.mongodb.core.query.CriteriaDefinition#getKey()
@@ -188,6 +216,14 @@ public class TextCriteria implements CriteriaDefinition {
 
 		if (!terms.isEmpty()) {
 			document.put("$search", join(terms));
+		}
+
+		if (caseSensitive != null) {
+			document.put("$caseSensitive", caseSensitive);
+		}
+
+		if (diacriticSensitive != null) {
+			document.put("$diacriticSensitive", diacriticSensitive);
 		}
 
 		return new Document("$text", document);
