@@ -169,7 +169,7 @@ public class TextCriteria implements CriteriaDefinition {
 	/**
 	 * Optionally enable or disable case sensitive search.
 	 *
-	 * @param caseSensitive boolean flag endable/disable.
+	 * @param caseSensitive boolean flag to enable/disable.
 	 * @return never {@literal null}.
 	 * @since 1.10
 	 */
@@ -180,9 +180,9 @@ public class TextCriteria implements CriteriaDefinition {
 	}
 
 	/**
-	 * Optionallly enable or disable diacritic sensitive search against version 3 text indexes.
+	 * Optionally enable or disable diacritic sensitive search against version 3 text indexes.
 	 *
-	 * @param diacriticSensitive boolean flag endable/disable.
+	 * @param diacriticSensitive boolean flag to enable/disable.
 	 * @return never {@literal null}.
 	 * @since 1.10
 	 */

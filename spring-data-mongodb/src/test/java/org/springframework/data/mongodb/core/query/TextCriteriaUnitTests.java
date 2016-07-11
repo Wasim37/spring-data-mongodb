@@ -16,10 +16,9 @@
 package org.springframework.data.mongodb.core.query;
 
 import static org.hamcrest.core.IsEqual.*;
+import static org.junit.Assert.*;
 
 import org.bson.Document;
-import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.mongodb.core.DBObjectTestUtils;
 
@@ -37,7 +36,7 @@ public class TextCriteriaUnitTests {
 	public void shouldNotHaveLanguageField() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage();
-		Assert.assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ }")));
+		assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ }")));
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class TextCriteriaUnitTests {
 	public void shouldNotHaveLanguageForNonDefaultLanguageField() {
 
 		TextCriteria criteria = TextCriteria.forLanguage("spanish");
-		Assert.assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$language\" : \"spanish\" }")));
+		assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$language\" : \"spanish\" }")));
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class TextCriteriaUnitTests {
 	public void shouldCreateSearchFieldForSingleTermCorrectly() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matching("cake");
-		Assert.assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"cake\" }")));
+		assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"cake\" }")));
 	}
 
 	/**
@@ -67,7 +66,7 @@ public class TextCriteriaUnitTests {
 	public void shouldCreateSearchFieldCorrectlyForMultipleTermsCorrectly() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny("bake", "coffee", "cake");
-		Assert.assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"bake coffee cake\" }")));
+		assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"bake coffee cake\" }")));
 	}
 
 	/**
@@ -77,8 +76,8 @@ public class TextCriteriaUnitTests {
 	public void shouldCreateSearchFieldForPhraseCorrectly() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingPhrase("coffee cake");
-		Assert.assertThat(DBObjectTestUtils.getAsDocument(criteria.getCriteriaObject(), "$text"),
-				IsEqual.<Document> equalTo(new Document("$search", "\"coffee cake\"")));
+		assertThat(DBObjectTestUtils.getAsDocument(criteria.getCriteriaObject(), "$text"),
+				equalTo(new Document("$search", "\"coffee cake\"")));
 	}
 
 	/**
@@ -88,7 +87,7 @@ public class TextCriteriaUnitTests {
 	public void shouldCreateNotFieldCorrectly() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().notMatching("cake");
-		Assert.assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"-cake\" }")));
+		assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"-cake\" }")));
 	}
 
 	/**
@@ -98,7 +97,7 @@ public class TextCriteriaUnitTests {
 	public void shouldCreateSearchFieldCorrectlyForNotMultipleTermsCorrectly() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().notMatchingAny("bake", "coffee", "cake");
-		Assert.assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"-bake -coffee -cake\" }")));
+		assertThat(criteria.getCriteriaObject(), equalTo(searchObject("{ \"$search\" : \"-bake -coffee -cake\" }")));
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class TextCriteriaUnitTests {
 	public void shouldCreateSearchFieldForNotPhraseCorrectly() {
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().notMatchingPhrase("coffee cake");
-		Assert.assertThat(DBObjectTestUtils.getAsDocument(criteria.getCriteriaObject(), "$text"),
+		assertThat(DBObjectTestUtils.getAsDocument(criteria.getCriteriaObject(), "$text"),
 				equalTo(new Document("$search", "-\"coffee cake\"")));
 	}
 
