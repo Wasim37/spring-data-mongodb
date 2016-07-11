@@ -602,6 +602,31 @@ public class Update {
 	}
 
 	/**
+	 * {@link Modifier} implementation used to propagate {@code $position}.
+	 *
+	 * @author Christoph Strobl
+	 * @since 1.7
+	 */
+	private static class PositionModifier implements Modifier {
+
+		private final int position;
+
+		public PositionModifier(int position) {
+			this.position = position;
+		}
+
+		@Override
+		public String getKey() {
+			return "$position";
+		}
+
+		@Override
+		public Object getValue() {
+			return position;
+		}
+	}
+
+	/**
 	 * Implementation of {@link Modifier} representing {@code $slice}.
 	 *
 	 * @author Mark Paluch
@@ -635,31 +660,6 @@ public class Update {
 	}
 
 	/**
-	 * {@link Modifier} implementation used to propagate {@code $position}.
-	 *
-	 * @author Christoph Strobl
-	 * @since 1.7
-	 */
-	private static class PositionModifier implements Modifier {
-
-		private final int position;
-
-		public PositionModifier(int position) {
-			this.position = position;
-		}
-
-		@Override
-		public String getKey() {
-			return "$position";
-		}
-
-		@Override
-		public Object getValue() {
-			return position;
-		}
-	}
-
-	/**
 	 * Builder for creating {@code $push} modifiers
 	 *
 	 * @author Christoph Strobl
@@ -679,7 +679,7 @@ public class Update {
 		 * Propagates {@code $each} to {@code $push}
 		 *
 		 * @param values
-		 * @return
+		 * @return never {@literal null}.
 		 */
 		public Update each(Object... values) {
 
@@ -696,7 +696,8 @@ public class Update {
 		 * elements. <br />
 		 *
 		 * @param count
-		 * @return
+		 * @return never {@literal null}.
+		 * @since 1.10
 		 */
 		public PushOperatorBuilder slice(int count) {
 
@@ -708,7 +709,7 @@ public class Update {
 		 * Forces values to be added at the given {@literal position}.
 		 *
 		 * @param position needs to be greater than or equal to zero.
-		 * @return
+		 * @return never {@literal null}.
 		 * @since 1.7
 		 */
 		public PushOperatorBuilder atPosition(int position) {
@@ -726,7 +727,7 @@ public class Update {
 		 * Forces values to be added at given {@literal position}.
 		 *
 		 * @param position can be {@literal null} which will be appended at the last position.
-		 * @return
+		 * @return never {@literal null}.
 		 * @since 1.7
 		 */
 		public PushOperatorBuilder atPosition(Position position) {
@@ -744,7 +745,7 @@ public class Update {
 		 * Propagates {@link #value(Object)} to {@code $push}
 		 *
 		 * @param values
-		 * @return
+		 * @return never {@literal null}.
 		 */
 		public Update value(Object value) {
 			return Update.this.push(key, value);
